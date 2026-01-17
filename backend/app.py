@@ -74,12 +74,17 @@ ingredient_groups = {
     'titanium_dioxide': ['titanium dioxide'],
     'peg_100_stearate': ['peg-100 stearate'],
 }
+@app.route('/product-types', methods=['GET'])
+def get_product_types():
+    types = products_df['type'].dropna().unique().tolist()
+    return jsonify({"types": types})
 @app.route('/filter-products', methods=['POST'])
 def filter_products():
     data = request.get_json()
     
-    # Step 1: Get predicted group keys like "preservative", "hydrating", etc.
+    # Get predicted group keys like "preservative", "hydrating", etc.
     predicted_groups = data.get('ingredients', {})  # from ML prediction
+    selected_type = data.get('product_type')  # ✅ changed to match frontend# <-- ✅ get selected product type from frontend
     
     if not predicted_groups:
         return jsonify({"error": "No ingredient groups provided"}), 400
@@ -89,52 +94,56 @@ def filter_products():
     excluded_groups = [k for k, v in predicted_groups.items() if v != 'Yes']
 
     # Expand to real ingredient names
-    required_ingredients = [ing.lower() for group in selected_groups for ing in ingredient_groups.get(group, [])]
-    forbidden_ingredients = [ing.lower() for group in excluded_groups for ing in ingredient_groups.get(group, [])]
+    required_ingredients = [
+        ing.lower()
+        for group in selected_groups
+        for ing in ingredient_groups.get(group, [])
+    ]
+    forbidden_ingredients = [
+        ing.lower()
+        for group in excluded_groups
+        for ing in ingredient_groups.get(group, [])
+    ]
    
     # Define product matcher
     def product_matches(ingredient_list):
         ingredient_list = [i.lower() for i in ingredient_list]
 
-        # Check if at least one required ingredient is present
-        has_required = False
-        for req in required_ingredients:
-            for ing in ingredient_list:
-                if req in ing:
-                    has_required = True
-                    break
-            if has_required:
-                break
+        # ✅ At least one required ingredient must be present
+        has_required = any(
+            any(req in ing for ing in ingredient_list)
+            for req in required_ingredients
+        )
 
-        # Check that no forbidden ingredient is present
-        no_forbidden = True
-        for forbidden in forbidden_ingredients:
-            for ing in ingredient_list:
-                if forbidden in ing:
-                    no_forbidden = False
-                    break
-            if not no_forbidden:
-                break
+        # ✅ None of the forbidden ingredients must be present
+        no_forbidden = all(
+            not any(forbidden in ing for ing in ingredient_list)
+            for forbidden in forbidden_ingredients
+        )
 
         return has_required and no_forbidden
 
-    
-
-    
-
-    # Step 5: Filter
+    # Step 1: Filter products by ingredient logic
     filtered = products_df[products_df['ingredients_list'].apply(product_matches)]
 
+    # Step 2: If type is provided, filter further by type
+    if selected_type:
+        filtered = filtered[filtered['type'].str.lower() == selected_type.lower()]
 
+    # Build response
+    product_names = filtered['name'].tolist()
+    product_brand = filtered["brand"].tolist()
+    product_type = filtered["type"].tolist()
 
-    product_names = filtered['name'].tolist()  # remplace 'product_name' par le vrai nom de la colonne si différent
-    product_brand= filtered["brand"].tolist()
-    product_type= filtered["type"].tolist()
     products = [
-    {"name": name, "brand": brand, "type": type}
-    for name, brand,type in zip(product_names, product_brand, product_type)]
+        {"name": name, "brand": brand, "type": p_type}
+        for name, brand, p_type in zip(product_names, product_brand, product_type)
+    ]
+
     return jsonify({"products": products})
 
+
+    
 
 
 if __name__ == "__main__":

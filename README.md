@@ -183,6 +183,11 @@ Le frontend :
 * affiche les résultats de manière visuelle et intuitive
 
 Le fichier `App.jsx` contient toute la logique de navigation, de sélection et d’affichage.
+<img width="965" height="575" alt="Capture d&#39;écran 2026-01-18 143222" src="https://github.com/user-attachments/assets/5b547a62-c90a-4449-929d-deff70441fe1" />
+<img width="986" height="764" alt="Capture d&#39;écran 2026-01-18 143240" src="https://github.com/user-attachments/assets/b3698298-bde6-44c2-af08-95b9617e0ede" />
+<img width="946" height="805" alt="Capture d&#39;écran 2026-01-18 143253" src="https://github.com/user-attachments/assets/10ce79f2-9788-4686-9e0d-c88efff51295" />
+<img width="968" height="865" alt="Capture d&#39;écran 2026-01-18 143310" src="https://github.com/user-attachments/assets/149b7bed-4234-4df0-b7b6-03634028b66a" />
+<img width="979" height="881" alt="Capture d&#39;écran 2026-01-18 143320" src="https://github.com/user-attachments/assets/e63c4fe6-52b2-4e57-84ab-2cc63a5a005d" />
 
 ---
 

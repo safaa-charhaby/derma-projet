@@ -220,6 +220,8 @@ Afin de mieux comprendre les données et d’évaluer les performances du modèl
 **Objectif :** évaluer la capacité d’un modèle à distinguer les classes, et plus la courbe s’approche du coin supérieur gauche, meilleure est la performance.
 
 <img width="454" height="349" alt="image" src="https://github.com/user-attachments/assets/55153a85-40d8-48db-82b9-a94f0b433ed0" />
+
+
 #### d)La courbe DET 
 **Objectif :** comparer plus finement les erreurs des systèmes de détection, surtout quand les erreurs sont rares.
 <img width="452" height="333" alt="image" src="https://github.com/user-attachments/assets/17866794-ebbe-45a3-afdf-117e9b068f6f" />

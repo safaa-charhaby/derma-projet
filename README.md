@@ -218,6 +218,7 @@ Afin de mieux comprendre les données et d’évaluer les performances du modèl
 
 #### c) La courbe ROC: 
 **Objectif :** évaluer la capacité d’un modèle à distinguer les classes, et plus la courbe s’approche du coin supérieur gauche, meilleure est la performance.
+
 <img width="454" height="349" alt="image" src="https://github.com/user-attachments/assets/55153a85-40d8-48db-82b9-a94f0b433ed0" />
 #### d)La courbe DET 
 **Objectif :** comparer plus finement les erreurs des systèmes de détection, surtout quand les erreurs sont rares.
@@ -225,64 +226,22 @@ Afin de mieux comprendre les données et d’évaluer les performances du modèl
 
 ---
 
-### 📄 Données d’entraînement
 
-Le modèle est entraîné à partir d’un **fichier CSV** contenant :
-
-* des colonnes de préoccupations cutanées (features)
-* une colonne cible indiquant les ingrédients recommandés
-
-Exemple simplifié :
-
-| Acne Fighting | Hydrating | Anti-Aging | Recommended Ingredients |
-| ------------- | --------- | ---------- | ----------------------- |
-| 1             | 0         | 1          | Niacinamide;Retinol     |
-
----
-
-### 🤖 Modèle de Machine Learning utilisé et justification
-
-#### 🔍 Modèle choisi : **Random Forest Classifier**
-
-Dans ce projet, nous avons choisi d’utiliser un **Random Forest Classifier**, un algorithme d’apprentissage supervisé basé sur un ensemble d’arbres de décision.
-
-#### ✅ Pourquoi Random Forest ?
-
-Ce choix est motivé par plusieurs raisons :
-
-* **Adapté aux données tabulaires** : notre dataset CSV est composé de variables binaires (0/1), ce qui correspond parfaitement aux forces de Random Forest.
-* **Gestion du multi-label** : le modèle peut prédire plusieurs ingrédients en même temps lorsqu’il est combiné avec un `MultiLabelBinarizer`.
-* **Robuste au bruit** : grâce à l’agrégation de plusieurs arbres, le modèle réduit le risque de surapprentissage (overfitting).
-* **Interprétable** : il est possible d’analyser l’importance des features (skin concerns) dans la décision.
-* **Rapide à entraîner** : idéal pour un projet académique ou prototype.
-
-> 💡 D’autres modèles (Logistic Regression, SVM, Neural Networks) ont été envisagés, mais Random Forest offre le meilleur compromis entre performance, simplicité et explicabilité.
-
----
 
 ### 🏋️ Entraînement du modèle
 
 Le script `train_model.py` :
 
 * charge le CSV
-* entraîne un modèle (ex: RandomForest)
+* entraîne un modèle 
 * sauvegarde le modèle avec `joblib`
 
-```python
-joblib.dump(model_data, "model/final_model.joblib")
-```
 
 ---
 
 ### 📦 Contenu du fichier `final_model.joblib`
 
-```python
-{
-  "features": ["Acne Fighting", "Hydrating", "Anti-Aging", ...],
-  "classifier": trained_model,
-  "label_binarizer": mlb
-}
-```
+
 
 Ce fichier est chargé **au démarrage du backend Flask**.
 

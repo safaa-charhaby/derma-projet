@@ -19,6 +19,7 @@ export default function App() {
   };
 
   const faceAreas = Object.keys(productTypesByArea);
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
   // === State ===
   const [selectedFaceArea, setSelectedFaceArea] = useState(null);
@@ -65,7 +66,7 @@ export default function App() {
     setLoading(true); setError(null);
     try {
       const features = Object.values(selectedConcerns).map(v => v ? 1 : 0);
-      const res = await fetch('http://localhost:5000/predict', {
+      const res = await fetch(`${API_URL}/predict`, {
         method: 'POST', headers: {'Content-Type':'application/json'},
         body: JSON.stringify({ features, product_type: selectedProductType })
       });
@@ -81,7 +82,7 @@ export default function App() {
     if (!recommendations) return;
     setProductsLoading(true); setProductsError(null);
     try {
-      const res = await fetch('http://localhost:5000/filter-products', {
+      const res = await fetch(`${API_URL}/filter-products`, {
         method: 'POST', headers:{'Content-Type':'application/json'},
         body: JSON.stringify({ ingredients: recommendations, product_type: selectedProductType })
       });

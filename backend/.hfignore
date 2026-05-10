@@ -1,0 +1,9 @@
+venv/
+__pycache__/
+*.pyc
+multi_target_svm_model.joblib
+Untitled-1[1].ipynb
+projets.csv
+predicted_ingredients.csv
+classification_report_rf.csv
+.git/
